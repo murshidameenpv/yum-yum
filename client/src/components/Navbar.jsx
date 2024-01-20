@@ -1,10 +1,24 @@
-import React from "react";
-import logo from "/logo.png";
+import React, { useEffect, useState } from "react";
+import logo from "/home/logo.png";
 import { IoMdCall } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
 
 function Navbar() {
+  // Handle scroll functions
+  // This function checks the vertical scroll position of the window (window.scrollY). If the scroll position is greater than 0, it means the user has scrolled down, and isSticky is set to true. If the scroll position is 0 (top of the page), isSticky is set to false.
+  const [isSticky, setSticky] = useState(false)
+  useEffect(() => {
+   const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 0)
+        setSticky(true)
+      else
+        setSticky(false)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return ()=>window.removeEventListener("scroll", handleScroll);
+  },[])
   const navItems = (
     <>
       <li>
@@ -48,8 +62,8 @@ function Navbar() {
     </>
   );
   return (
-    <header className="max-w-screen-2xl mx-auto container">
-      <div className="navbar xl:px-24">
+    <header className="max-w-screen-2xl mx-auto container fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out">
+      <div className={`navbar xl:px-24 ${isSticky?"shadow-md bg-base-100 transition-all duration-300 ease-out":""}`}>
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -121,7 +135,7 @@ function Navbar() {
             </div>
           </div>
           {/* button */}
-          <a className="btn bg-green rounded-full text-white flex items-center px-6 gap-2 hover:bg-slate-500">
+          <a className="btn bg-green rounded-full text-white flex items-center px-6 gap-2">
             <IoMdCall />
             Button
           </a>
