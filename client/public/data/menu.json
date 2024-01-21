@@ -17,7 +17,7 @@
     },
     {
         "_id": "642c155b2c4774f05c36ee7c",
-        "name": "Escalope de Veau",
+        "name": "Cscalope de Veau",
         "recipe": "Roasted duck breast (served pink) with gratin potato and a griottine cherry sauce",
         "image": "/home/recipes/img2.png",
         "category": "popular",
@@ -65,7 +65,7 @@
     },
     {
         "_id": "642c155b2c4774f05c36ee94",
-        "name": "Escalope de Veau",
+        "name": "Fscalope de Veau",
         "recipe": "Pan roasted haddock fillet wrapped in smoked French bacon with pea purée and tomato and chive vinaigrette",
         "image": "/home/recipes/img1.png",
         "category": "pizza",
@@ -153,7 +153,7 @@
     },
     {
         "_id": "642c155b2c4774f05c36ee87",
-        "name": "Chicken and Walnut Salad",
+        "name": "Ohicken and Walnut Salad",
         "recipe": "Pan roasted pork belly with gratin potato, braised Savoy cabbage, apples, thyme and calvados jus",
         "image": "/home/recipes/img3.png",
         "category": "dessert",
@@ -201,7 +201,7 @@
     },
     {
         "_id": "642c155b2c4774f05c36ee90",
-        "name": "Fish Parmentier",
+        "name": "Kish Parmentier",
         "recipe": "Sautéed breaded veal escalope with watercress, lemon and veal jus.",
         "image": "/home/recipes/img3.png",
         "category": "dessert",
@@ -289,7 +289,7 @@
     },
     {
         "_id": "642c155b2c4774f05c36ee8b",
-        "name": "Chicken and Walnut Salad",
+        "name": "Rhicken and Walnut Salad",
         "recipe": "Pan roasted pork belly with gratin potato, braised Savoy cabbage, apples, thyme and calvados jus",
         "image": "/home/recipes/img2.png",
         "category": "dessert",
@@ -297,7 +297,7 @@
     },
     {
         "_id": "642c155b2c4774f05c36ee8f",
-        "name": "Chicken and Walnut Salad",
+        "name": "Rshicken and Walnut Salad",
         "recipe": "Pan roasted pork belly with gratin potato, braised Savoy cabbage, apples, thyme and calvados jus",
         "image": "/home/recipes/img3.png",
         "category": "dessert",
