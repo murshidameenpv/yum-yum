@@ -8,9 +8,9 @@ function Cards({ item }) {
         setHeartFilled(!isHeartFilled)
     }
   return (
-    <div className="card bg-base-100 w-88 rounded-md relative px-4">
+    <div className="card shadow-lg bg-base-100 h-[450px] w-88 rounded-lg relative mx-3 px-4">
       <div
-        className={`rating gap-1 absolute right-2 top-2 p-4 heartStar bg-green ${
+        className={`rating gap-1 absolute right-0 top-0 p-4 heartStar bg-green ${
           isHeartFilled ? "text-rose-600" : "text-white"
         }`}
         onClick={handleHeartClicked}

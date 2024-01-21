@@ -68,7 +68,7 @@ function SpecialDishes() {
           <FaAngleRight className='w-7 h-7 p-1'/>
         </button>
       </div>
-      <Slider ref={slider} {...settings} className='overflow-hidden -mt-2 space-x-5'>
+      <Slider ref={slider} {...settings} className='overflow-hidden mt-2 h-88 space-x-4'>
         {
           recipes.map((item, index) => (
             <Cards key={index} item={item} />

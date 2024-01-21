@@ -29,7 +29,7 @@ function Navbar() {
           <summary>Menu</summary>
           <ul className="p-2">
             <li>
-              <a>All</a>
+              <a href="/menu">All</a>
             </li>
             <li>
               <a>Salad</a>

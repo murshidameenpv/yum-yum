@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Main from "../layout/Main";
 import Home from "../pages/Home/Home";
 import Offers from "../pages/Offers/Offers";
+import Menu from "../pages/Menu/Menu";
 
 
 //This is the root path,every routes will start from here
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: "/offers",
                 element: <Offers />
+            },
+            {
+                path: "/menu",
+                element: <Menu/>
             }
         ]
     },
