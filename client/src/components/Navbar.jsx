@@ -11,6 +11,7 @@ function Navbar() {
   const [isSticky, setSticky] = useState(false)
   const authInfo = useContext(AuthContext);
   console.log(authInfo.user,"oooooooooooooooo");
+  
   useEffect(() => {
    const handleScroll = () => {
       const offset = window.scrollY;
