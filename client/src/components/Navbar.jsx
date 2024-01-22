@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import logo from "/home/logo.png";
-import { IoMdCall } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
+import { FaRegUser } from "react-icons/fa";
+import Modal from "./Modal";
 
 function Navbar() {
   // Handle scroll functions
@@ -63,7 +64,13 @@ function Navbar() {
   );
   return (
     <header className="max-w-screen-2xl mx-auto container fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out">
-      <div className={`navbar xl:px-24 ${isSticky?"shadow-md bg-base-100 transition-all duration-300 ease-out":""}`}>
+      <div
+        className={`navbar xl:px-24 ${
+          isSticky
+            ? "shadow-md bg-base-100 transition-all duration-300 ease-out"
+            : ""
+        }`}
+      >
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -115,7 +122,11 @@ function Navbar() {
             </svg>
           </button>
           {/* cartItems */}
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle mr-3 items-center justify-center hidden lg:flex">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle mr-3 items-center justify-center hidden lg:flex"
+          >
             <div className="indicator">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -135,10 +146,15 @@ function Navbar() {
             </div>
           </div>
           {/* button */}
-          <a className="btn bg-green rounded-full text-white flex items-center px-6 gap-2">
-            <IoMdCall />
-            Button
-          </a>
+          {/* Open the modal using document.getElementById('ID').showModal() method */}
+          <button
+            className="btn bg-green rounded-full text-white flex items-center px-6 gap-2"
+            onClick={() => document.getElementById("my_modal_5").showModal()}
+          >
+            <FaRegUser />
+            Login
+          </button>
+         <Modal/>
         </div>
       </div>
     </header>

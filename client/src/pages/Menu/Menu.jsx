@@ -3,43 +3,46 @@ import Cards from '../../components/Cards';
 import { FaFilter } from 'react-icons/fa'
 function Menu() {
   const [menu, setMenu] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
   // console.log(selectedCategory,"ppppppppppppppp");
-  const [sortOption, setSortOption] = useState("default")
+  const [sortOption, setSortOption] = useState("default");
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage] = useState(8)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8);
   //loading data
   useEffect(() => {
     // hardcoded data
     const fetchData = async () => {
       try {
         const response = await fetch("/data/menu.json");
-        const data = await response.json()
+        const data = await response.json();
         // console.log(data);
-        setMenu(data)
-        setFilteredItems(data)
-      } catch(error) {
+        setMenu(data);
+        setFilteredItems(data);
+      } catch (error) {
         console.error("Error Fetching Data", error);
       }
-    }
+    };
     //call the finction inside useEffect
-    fetchData()
-  },[])
+    fetchData();
+  }, []);
   //Filter data based on category
   const filterItems = (category) => {
-    const filtered = category === "all" ? menu : menu.filter((item) => item.category === category);
+    const filtered =
+      category === "all"
+        ? menu
+        : menu.filter((item) => item.category === category);
     setFilteredItems(filtered);
-    setSelectedCategory(category)
-    setCurrentPage(1)
-  }
+    setSelectedCategory(category);
+    setCurrentPage(1);
+  };
   //Show all menu
   const showAllMenu = () => {
-    setFilteredItems(menu)
-    setSelectedCategory("all")
-    setCurrentPage(1)
-  }
+    setFilteredItems(menu);
+    setSelectedCategory("all");
+    setCurrentPage(1);
+  };
   //Sorting based on A -Z,Z-A,pricing
   const handleSorting = (option) => {
     setSortOption(option);
@@ -63,13 +66,15 @@ function Menu() {
         break;
     }
     setFilteredItems(sortedItems);
-    setCurrentPage(1)
-  }
+    setCurrentPage(1);
+  };
   //pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage
-  const currentItem = filteredItems.slice(indexOfFirstItem, indexOfLastItem)
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  //each page, you calculate the indices of the first and last items on that page. This is done with these lines of code :-
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItem = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <div>
       {/* Menu bannar */}
@@ -184,3 +189,11 @@ function Menu() {
 }
 
 export default Menu
+// notes
+
+   /* The Array.from method is a static method that creates a new array instance from an iterable object. Here it creates a new array with a length equal to the
+        number of pages, which is calculated as Math.ceil(filteredItems.length /
+        itemsPerPage). The map method then creates a new array of buttons, one
+        for each page */
+
+//  The underscore () here is a convention used by some developers to indicate that the parameter is not being used. The map function provides two parameters to the callback function: the current element and its index. In this case, you’re only using the index (to create the page numbers and set the key property of the buttons), so the underscore () is used for the first parameter to indicate that it’s not being used.
