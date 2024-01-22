@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import logo from "/home/logo.png";
-import { FaSearch } from "react-icons/fa";
-import { FaCartPlus } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import Modal from "./Modal";
+import { AuthContext } from "../contexts/AuthProvider";
+
 
 function Navbar() {
   // Handle scroll functions
   // This function checks the vertical scroll position of the window (window.scrollY). If the scroll position is greater than 0, it means the user has scrolled down, and isSticky is set to true. If the scroll position is 0 (top of the page), isSticky is set to false.
   const [isSticky, setSticky] = useState(false)
+  const authInfo = useContext(AuthContext);
+  console.log(authInfo.user,"oooooooooooooooo");
   useEffect(() => {
    const handleScroll = () => {
       const offset = window.scrollY;
@@ -62,6 +64,8 @@ function Navbar() {
       </li>
     </>
   );
+
+
   return (
     <header className="max-w-screen-2xl mx-auto container fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out">
       <div
