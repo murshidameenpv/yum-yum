@@ -3,14 +3,15 @@ import logo from "/home/logo.png";
 import { FaRegUser } from "react-icons/fa";
 import Modal from "./Modal";
 import { AuthContext } from "../contexts/AuthProvider";
+import Profile from "./Profile";
 
 
 function Navbar() {
   // Handle scroll functions
   // This function checks the vertical scroll position of the window (window.scrollY). If the scroll position is greater than 0, it means the user has scrolled down, and isSticky is set to true. If the scroll position is 0 (top of the page), isSticky is set to false.
   const [isSticky, setSticky] = useState(false)
-  const authInfo = useContext(AuthContext);
-  console.log(authInfo.user,"oooooooooooooooo");
+  const {user} = useContext(AuthContext);
+  console.log(user,"oooooooooooooooo");
   
   useEffect(() => {
    const handleScroll = () => {
@@ -152,14 +153,18 @@ function Navbar() {
           </div>
           {/* button */}
           {/* Open the modal using document.getElementById('ID').showModal() method */}
-          <button
-            className="btn bg-green rounded-full text-white flex items-center px-6 gap-2"
-            onClick={() => document.getElementById("my_modal_5").showModal()}
-          >
-            <FaRegUser />
-            Login
-          </button>
-         <Modal/>
+          {user ? 
+            <Profile user={user} />
+          : 
+            <button
+              className="btn bg-green rounded-full text-white flex items-center px-6 gap-2"
+              onClick={() => document.getElementById("my_modal_5").showModal()}
+            >
+              <FaRegUser />
+              Login
+            </button>
+          }
+          <Modal />
         </div>
       </div>
     </header>

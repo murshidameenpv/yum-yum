@@ -42,8 +42,9 @@ function Modal() {
   const handleLogin = () => {
     signUpWithGmail().then((result) => {
       const user = result.user;
-      alert("Signup Successful")
+      document.getElementById("my_modal_5").close();
       navigate(from, { replace: true });
+      alert("Signup Successful")
     }).catch((error) => {
       // Handle Errors here.
       console.error(error);
