@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../contexts/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Profile({ user }) {
-    console.log(user.photoURL),"URL OF THE PHOTO";
+  // console.log(user.photoURL),"URL OF THE PHOTO";
+
+  const { logOut } = useContext(AuthContext);
+  //redirecting to home or specific page
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  
+  const handleLogout = () => {
+    logOut()
+      .then(() => {
+        alert("Logout SuccessFull");
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
   return (
     <div>
       <div className="drawer drawer-end">
@@ -36,7 +56,7 @@ function Profile({ user }) {
           <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
             {/* Sidebar content here */}
             <li>
-              <a>Profile</a>
+              <a href="/update-profile">Profile</a>
             </li>
             <li>
               <a>Orders</a>
@@ -45,7 +65,7 @@ function Profile({ user }) {
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <a onClick={handleLogout}>Logout</a>
             </li>
           </ul>
         </div>

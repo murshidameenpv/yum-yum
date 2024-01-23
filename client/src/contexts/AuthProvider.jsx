@@ -18,7 +18,8 @@ function AuthProvider({ children }) {
     }
 
     //signup with gmail account
-    const signUpWithGmail = () => {
+  const signUpWithGmail = () => {
+      setLoading(true);
         return signInWithPopup(auth, provider)
     }
 
@@ -29,12 +30,13 @@ function AuthProvider({ children }) {
     }
 
     //logout
-    const logout = () => {
+    const logOut = () => {
         return signOut(auth);
     }
 
     //update user profile
-    const updateUserProfile = ({ name,photoURL }) => {
+  const updateUserProfile = (name, photoURL ) => {
+      console.log(name,photoURL,"qqqqqqqqqqqq");
        return updateProfile(auth.currentUser, {
           displayName: name,
           photoURL: photoURL,
@@ -43,15 +45,12 @@ function AuthProvider({ children }) {
     
     //check signed-in user
     useEffect(() => {
-       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-          if (currentUser) {
-              setUser(currentUser)
-              setLoading(false)
-          } else {
-            // User is signed out
-            // ...
-          }
-        });
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        if (currentUser) {
+          setUser(currentUser)
+        }
+        setLoading(false)
+      });
       return () => {
           return unsubscribe()
         }
@@ -65,7 +64,7 @@ function AuthProvider({ children }) {
       createUser,
       signUpWithGmail,
       login,
-      logout,
+      logOut,
       updateUserProfile,
     };
   return (

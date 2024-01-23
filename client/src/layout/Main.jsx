@@ -9,15 +9,15 @@ function Main() {
   const {loading} = useContext(AuthContext)
   return (
     <div>
-      {loading ? (
+      {loading ? 
         <LoadingSpinner/>
-      ) : (
+      : 
         <div>
           <Navbar />
           <Outlet />
           <Footer />
         </div>
-      )}
+      }
     </div>
   );
 }
