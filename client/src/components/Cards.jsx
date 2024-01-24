@@ -1,16 +1,48 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa'
+import { AuthContext } from '../contexts/AuthProvider';
+import axios from "axios";
 
 function Cards({ item }) {
-    const [isHeartFilled, setHeartFilled] = useState(false)
+  const {_id,name,recipe,image,price} = item
+  const { user } = useContext(AuthContext)
+  // console.log(user);
+  //Add to cart function
+
+const handleAddToCart = (item) => {
+  // console.log(item);
+  if (user && user?.email) {
+    const cartItems = {
+      menuItemId: _id,
+      name,
+      quantity: 1,
+      image,
+      price,
+      email: user.email,
+    };
+    // console.log(cartItems);
+    axios
+      .post("http://localhost:3000/cart", cartItems)
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error Fetching Data", error);
+      });
+  }
+};
+
+  
+  const [isHeartFilled, setHeartFilled] = useState(false)
     const handleHeartClicked = () => {
         setHeartFilled(!isHeartFilled)
     }
   return (
-    <div className="card shadow-lg bg-base-100 h-[450px] w-88 rounded-lg relative mx-3 px-4">
+    <div className="card shadow-lg bg-base-100  rounded-lg relative  px-1">
       <div
-        className={`rating gap-1 absolute right-0 top-0 p-4 heartStar bg-green ${
+        className={`rating gap-1 absolute right-1 top-0 p-4 heartStar bg-green ${
           isHeartFilled ? "text-rose-600" : "text-white"
         }`}
         onClick={handleHeartClicked}
@@ -35,7 +67,12 @@ function Cards({ item }) {
             <span className="text-brown text-sm">$</span>
             {item.price}
           </h5>
-          <button className="btn bg-green text-white">Buy Now</button>
+          <button
+            className="btn bg-green text-white"
+            onClick={() => handleAddToCart(item)}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
     </div>

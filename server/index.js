@@ -33,6 +33,21 @@ export async function run() {
           const result = await menuCollection.find().toArray()
           res.send(result)
       })
+    
+    
+    //All cart operations
+    //posting cart item to db
+    app.post("/cart", async (req, res) => {
+      const cartItem = req.body
+      const result = await cartCollection.insertOne(cartItem);
+      res.send(result)
+    })
+    
+    
+    
+    
+    
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(

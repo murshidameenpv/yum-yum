@@ -4,19 +4,29 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import Cards from '../../components/Cards';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import axios from "axios";
 
 function SpecialDishes() {
   const [recipes, setRecipes] = useState([])
   //mutable object
   const slider = React.useRef(null)
   // console.log(slider,"oooooooooooooooooo");
-  React.useEffect(() => {
-    fetch('/data/menu.json').then((res) => res.json()).then((data) => {
-        const specials = data.filter((item)=>item.category==="popular")
-      // console.log(specials);
-      setRecipes(specials)
-    })
-  },[])
+
+ React.useEffect(() => {
+   axios
+     .get("http://localhost:3000/menu")
+     .then((response) => {
+       const specials = response.data.filter(
+         (item) => item.category === "popular"
+       );
+       // console.log(specials);
+       setRecipes(specials);
+     })
+     .catch((error) => {
+       console.error("Error Fetching Data", error);
+     });
+ }, []);
+
   const settings = {
     dots: true,
     infinite: true,
