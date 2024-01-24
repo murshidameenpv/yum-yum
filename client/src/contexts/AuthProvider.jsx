@@ -11,7 +11,8 @@ const auth = getAuth(app);
 function AuthProvider({ children }) {
     const [user, setUser] = useState("")
     const [loading, setLoading] = useState(true)
-
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    
     //create an account
     const createUser = (email, password) => {
         return createUserWithEmailAndPassword(auth, email, password)
@@ -31,7 +32,10 @@ function AuthProvider({ children }) {
 
     //logout
     const logOut = () => {
-        return signOut(auth);
+      return signOut(auth)
+        .then(() => {
+          setIsAuthenticated(false); // User is not authenticated after logout
+        });
     }
 
     //update user profile
@@ -47,7 +51,10 @@ function AuthProvider({ children }) {
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         if (currentUser) {
-          setUser(currentUser)
+          setUser(currentUser);
+          setIsAuthenticated(true); // User is authenticated
+        } else {
+          setIsAuthenticated(false); // User is authenticated
         }
         setLoading(false)
       });
@@ -66,6 +73,7 @@ function AuthProvider({ children }) {
       login,
       logOut,
       updateUserProfile,
+      isAuthenticated,
     };
   return (
       <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

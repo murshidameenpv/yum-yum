@@ -17,9 +17,10 @@ function Profile({ user }) {
       .then(() => {
         alert("Logout SuccessFull");
         navigate(from, { replace: true });
+        document.getElementById("my-drawer-4").click();
       })
       .catch((error) => {
-        // An error happened.
+       console.log(error);
       });
   };
   return (
