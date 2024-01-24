@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 function Cards({ item }) {
   const {_id,name,recipe,image,price} = item
-  const { user } = useContext(AuthContext)
+  const { user,isAuthenticated } = useContext(AuthContext)
   const navigate = useNavigate()
   const location = useLocation()
   // console.log(user);
@@ -15,7 +15,7 @@ function Cards({ item }) {
   //Add to cart function
 const handleAddToCart = (item) => {
   // console.log(item);
-  if (user && user?.email) {
+  if (isAuthenticated && user && user.email) {
     const cartItems = {
       menuItemId: _id,
       name,
@@ -29,34 +29,33 @@ const handleAddToCart = (item) => {
       .post("http://localhost:3000/cart", cartItems)
       .then((response) => {
         const data = response.data;
-        // console.log(data);
+        console.log(data);
         if (data.insertedId)
           Swal.fire({
             position: "center",
             icon: "success",
-            title: "Your work has been saved",
+            title: "Item added to Cart!",
             showConfirmButton: true,
-            confirmButtonColor: "#495e57"
+            confirmButtonColor: "#495e57",
           });
       })
       .catch((error) => {
         console.error("Error Fetching Data", error);
       });
-  }
-  else {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#495e57",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      navigate("/signup", { state: { from: location } });
-    }
-  });
+  } else {
+    Swal.fire({
+      title: "Please Sign Up",
+      text: "You need to be signed in to add items to your cart!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#495e57",
+      cancelButtonColor: "#952323",
+      confirmButtonText: "Sign Up",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/signup", { state: { from: location } });
+      }
+    });
   }
 };
 

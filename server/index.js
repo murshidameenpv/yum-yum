@@ -5,7 +5,6 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 dotenv.config()
 const port = process.env.PORT || 3001
 
-
 const app = express()
 //middlewares
 app.use(cors())
@@ -20,52 +19,68 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
 export async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+    const db = client.db("yum-yum-db");
+    const menuCollection = db.collection("menus");
+    const cartCollection = db.collection("cartItems");
 
-     const menuCollection = client.db("yum-yum-db").collection("menus");
-      const cartCollection = client.db("yum-yum-db").collection("cartItems");
-      
-      //All Menu Items
-      app.get('/menu', async (req, res) => {
-          const result = await menuCollection.find().toArray()
-          res.send(result)
-      })
-    
-    
+    //All Menu Items
+    app.get('/menu', async (req, res) => {
+      try {
+        const result = await menuCollection.find().toArray();
+        res.status(200).send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching menu items');
+      }
+    });
+
     //All cart operations
     //posting cart item to db
     app.post("/cart", async (req, res) => {
-      const cartItem = req.body
-      const result = await cartCollection.insertOne(cartItem);
-      res.send(result)
-    })
-    
-    
-    
-    
-    
-    
+      try {
+        const cartItem = req.body;
+        console.log(cartItem,"This is cart item");
+        const result = await cartCollection.insertOne(cartItem);
+        res.status(201).send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error adding item to cart');
+      }
+    });
+
+    //get items from cart
+    app.get("/cart", async (req, res) => {
+      try {
+       const email = req.query.email;
+       const filter = { email: email };
+        const result = await cartCollection.find(filter).toArray();
+        res.status(201).send(result)
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching cart items');
+      }
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
   }
 }
+
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
     res.send(`Hello`)
-})
-
-
+});
 
 app.listen(port, () => {
     console.log(`Server Listening on port http://localhost:${port}`);
-})
+});
+
