@@ -31,11 +31,9 @@ function AuthProvider({ children }) {
     }
 
     //logout
-    const logOut = () => {
-      return signOut(auth)
-        .then(() => {
-          setIsAuthenticated(false); // User is not authenticated after logout
-        });
+    const logOut = async () => {
+      await signOut(auth);
+      setIsAuthenticated(false); // User is not authenticated after logout
     }
 
     //update user profile
