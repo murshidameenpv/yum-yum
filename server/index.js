@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import cors from 'cors'
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 dotenv.config()
 const port = process.env.PORT || 3001
 
@@ -64,6 +64,35 @@ export async function run() {
         res.status(500).send('Error fetching cart items');
       }
     });
+
+
+    //get specific cart
+    app.get('/cart/:id', async (req, res) => {
+      try {
+        const id = req.params.id
+        //req.params is  string so we need o convert it to object
+        const filter = { _id: new ObjectId(id) }
+        const result = await cartCollection.findOne(filter)
+        res.status(201).send(result)
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching cart')
+      }
+    })
+
+    //delete items from cart 
+    app.delete('/cart/:id', async (req, res) => {
+      try {
+        const id = req.params.id
+        const filter = { _id: new ObjectId(id) }
+        const result = await cartCollection.deleteOne(filter)
+        res.status(201).send(result)
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error removing item from cart')
+      }
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
