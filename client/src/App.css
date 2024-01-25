@@ -23,3 +23,11 @@ header{
     text-underline-offset: 5px;
     color:#495e57
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+

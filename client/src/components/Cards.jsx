@@ -4,10 +4,12 @@ import { FaHeart } from 'react-icons/fa'
 import { AuthContext } from '../contexts/AuthProvider';
 import axios from "axios";
 import Swal from "sweetalert2";
+import useCart from '../hooks/useCart';
 
 function Cards({ item }) {
-  const {_id,name,recipe,image,price} = item
-  const { user,isAuthenticated } = useContext(AuthContext)
+  const {_id,name,image,price} = item
+  const { user, isAuthenticated } = useContext(AuthContext)
+  const [cart, refetch] = useCart();
   const navigate = useNavigate()
   const location = useLocation()
   // console.log(user);
@@ -38,6 +40,7 @@ const handleAddToCart = (item) => {
             showConfirmButton: true,
             confirmButtonColor: "#495e57",
           });
+          refetch()
       })
       .catch((error) => {
         console.error("Error Fetching Data", error);
