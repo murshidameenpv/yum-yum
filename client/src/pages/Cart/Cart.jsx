@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import useCart from '../../hooks/useCart';
 import { FaTrash } from 'react-icons/fa'
 import Swal from 'sweetalert2';
 import axios from 'axios'
+import { AuthContext } from '../../contexts/AuthProvider';
+import { IoMdAdd, } from "react-icons/io";
+import { RiSubtractFill } from "react-icons/ri";
 
 function Cart() {
   const [cart, refetch] = useCart()
+  const { user, isAuthenticated } = useContext(AuthContext)
+  const [cartItems ,setCartItems] = useState([])
   // console.log(cart,"cart items in cart page");
   const handleDelete = (item) => {
     Swal.fire({
@@ -23,7 +28,7 @@ function Cart() {
             `http://localhost:3000/cart/${item._id}`
           );
           const data = response.data;
-          console.log(data,"delete cart item");
+          // console.log(data,"delete cart item");
           if (data.deletedCount > 0) {
             Swal.fire({
               title: "Deleted!",
@@ -45,6 +50,60 @@ function Cart() {
       }
     });
   };
+  const handleDecreaseQuantity = async (item) => {
+  try {
+    // console.log(item._id,'ooooo');
+    const response = await axios.put(`http://localhost:3000/cart/${item._id}`, {
+      quantity: item.quantity - 1,
+    });
+    const updatedCart = cartItems.map((cartItem) => { 
+      if (cartItem.id === item.id) {
+        return {
+          ...cartItem,quantity:cartItem.quantity - 1
+        }
+      }
+        return cartItem;
+    })
+    refetch()
+    setCartItems(updatedCart)
+    const data = response.data;
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+  };
+
+  const handleIncreaseQuantity = async (item) => {
+  try {
+    const response = await axios.put(`http://localhost:3000/cart/${item._id}`, {
+      quantity: item.quantity + 1,
+    });
+      const updatedCart = cartItems.map((cartItem) => {
+        if (cartItem.id === item.id) {
+          return {
+            ...cartItem,
+            quantity: cartItem.quantity + 1,
+          };
+        }
+        return cartItem;
+      });
+      refetch();
+      setCartItems(updatedCart);
+    const data = response.data;
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+  };
+//Calculate total price (quantity * price of item)
+  const calculatePrice = (item) => {
+    return item.price * item.quantity
+  }
+  //Calculate sub total
+  const cartSubTotal = cart.reduce((total, item) => {
+    return total + calculatePrice(item)
+  },0)
+  
 
   return (
     <div className="section-container ">
@@ -58,49 +117,101 @@ function Cart() {
           </div>
         </div>
       </div>
-      {/* table for cart */}
-      <div className="overflow-x-auto">
-        <table className="table">
-          {/* head */}
-          <thead className="bg-green text-white rounded-xl">
-            <tr>
-              <th>#</th>
-              <th>Food</th>
-              <th>Item Name</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart.map((item, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img
-                          src={item.image}
-                          alt="Avatar Tailwind CSS Component"
-                        />
+      {cart.length === 0 || !cart ? (
+        <div className="flex justify-center items-center">
+          <img src="/empty.png" alt="emptycart" className="w-96" />
+        </div>
+      ) : (
+        <>
+          {/* table for cart */}
+          <div className="overflow-x-auto">
+            <table className="table">
+              {/* head */}
+              <thead className="bg-green text-white rounded-xl">
+                <tr>
+                  <th>#</th>
+                  <th>Food</th>
+                  <th>Item Name</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.map((item, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle w-12 h-12">
+                            <img
+                              src={item.image}
+                              alt="Avatar Tailwind CSS Component"
+                            />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="font-extrabold">{item.name}</td>
-                <td className="font-extrabold">{item.quantity}</td>
-                <td className="font-extrabold">{`$ ${item.price}`}</td>
-                <th>
-                  <button className="btn btn-ghost btn-xs" onClick={()=>handleDelete(item)}>
-                    <FaTrash className="text-rose-700" />
-                  </button>
-                </th>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    </td>
+                    <td className="font-extrabold">{item.name}</td>
+                    <td className="font-extrabold">
+                      <button
+                        className="btn btn-xs"
+                        onClick={() => handleDecreaseQuantity(item)}
+                        disabled={item.quantity <= 1}
+                      >
+                        <RiSubtractFill />
+                      </button>
+                      <input
+                        type="number"
+                        value={item.quantity}
+                        className="w-10 mx-2 text-center overflow-hidden appearance-none"
+                        readOnly
+                      />
+                      <button
+                        className="btn btn-xs"
+                        onClick={() => handleIncreaseQuantity(item)}
+                      >
+                        <IoMdAdd />
+                      </button>
+                    </td>
+                    <td className="font-extrabold">{`$ ${calculatePrice(
+                      item
+                    ).toFixed(2)}`}</td>
+                    <th>
+                      <button
+                        className="btn btn-ghost btn-xs"
+                        onClick={() => handleDelete(item)}
+                      >
+                        <FaTrash className="text-rose-700" />
+                      </button>
+                    </th>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* customer details. */}
+          <div className="my-12 flex flex-col md:flex-row justify-between items-start">
+            <div className="md:w-1/2 space-y-4">
+              <h3 className="font-bold">Customer Details</h3>
+              <p className="font-semibold">Name :{user.displayName}</p>
+              <p className="font-semibold">Email :{user.email}</p>
+              <p className="font-semibold">User Id : {user.uid}</p>
+            </div>
+            <div className="md:w-1/2 space-y-4">
+              <h3 className="font-bold">Shipping Details</h3>
+              <p className="font-semibold">Total Items : {cart.length}</p>
+              <p className="font-semibold">
+                {`Total Price : ${cartSubTotal.toFixed(2)}`}
+              </p>
+              <button className="bg-green btn text-white">
+                Proceed To Checkout
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -135,7 +135,7 @@ function Navbar() {
           </button>
 
           {/* cartItems */}
-          <Link to="cart">
+          <Link to={user && isAuthenticated ? "/cart" : "/signup"}  >
             <div
               tabIndex={0}
               role="button"
@@ -158,22 +158,18 @@ function Navbar() {
                 </svg>
                 {isAuthenticated ? (
                   <span className="badge badge-sm indicator-item">
-                    {" "}
-                    {cart.length}{" "}
+                    {cart.length}
                   </span>
                 ) : (
-                  <span className="badge badge-sm indicator-item">
-                      0
-                  </span>
+                  <span className="badge badge-sm indicator-item">0</span>
                 )}
-                }
               </div>
             </div>
           </Link>
 
           {/* button */}
           {/* Open the modal using document.getElementById('ID').showModal() method */}
-          {isAuthenticated ? (
+          {isAuthenticated && user ? (
             <Profile user={user} />
           ) : (
             <button

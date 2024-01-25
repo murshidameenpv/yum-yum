@@ -46,7 +46,7 @@ export async function run() {
         console.log(cartItem,"This is cart item");
         const result = await cartCollection.insertOne(cartItem);
         res.status(201).send(result);
-      } catch (error) {
+      } catch (error) { 
         console.error(error);
         res.status(500).send('Error adding item to cart');
       }
@@ -92,6 +92,29 @@ export async function run() {
         res.status(500).send('Error removing item from cart')
       }
     })
+
+    //update cart quantitiy
+    app.put('/cart/:id', async (req, res) => {
+      try {
+        const id = req.params.id
+        console.log(id,"cart id oooooooo");
+        const filter = { _id: new ObjectId(id) }
+        const { quantity } = req.body;
+        /* Set the upsert option to insert a document if no documents match the filter */
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+              quantity:parseInt(quantity,10)
+          },
+        };
+        const result = await cartCollection.updateOne(filter, updateDoc, options);
+        res.status(201).send(result)
+        
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error updating cart')
+      }
+    });
 
 
     // Send a ping to confirm a successful connection
