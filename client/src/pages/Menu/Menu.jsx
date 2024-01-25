@@ -17,9 +17,10 @@ function Menu() {
       try {
         const response = await axios.get("http://localhost:3000/menu");
         const data = response.data;
-        // console.log(data);
-        setMenu(data);
-        setFilteredItems(data);
+        const { menus } = data;
+         // console.log(data);
+        setMenu(menus);
+        setFilteredItems(menus);
       } catch (error) {
         console.error("Error Fetching Data", error);
       }
@@ -156,7 +157,7 @@ function Menu() {
               <option value="A-Z">A - Z</option>
               <option value="Z-A">Z - A</option>
               <option value="low-to-high">Low - High</option>
-              <option value="high-to-low">High - High</option>
+              <option value="high-to-low">High - Low</option>
             </select>
           </div>
         </div>
