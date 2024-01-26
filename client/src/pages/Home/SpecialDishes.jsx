@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -11,21 +11,21 @@ function SpecialDishes() {
   //mutable object
   const slider = React.useRef(null)
   // console.log(slider,"oooooooooooooooooo");
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/menu");
+      const specials = response.data?.menus.filter(
+        (item) => item.category === "popular"
+      );
+      setRecipes(specials);
+    } catch (error) {
+      console.error("Error Fetching Data", error);
+    }
+  };
+  fetchData();
+}, []);
 
- React.useEffect(() => {
-   axios
-     .get("http://localhost:3000/menu")
-     .then((response) => {
-       const specials = response.data.filter(
-         (item) => item.category === "popular"
-       );
-       // console.log(specials);
-       setRecipes(specials);
-     })
-     .catch((error) => {
-       console.error("Error Fetching Data", error);
-     });
- }, []);
 
   const settings = {
     dots: true,

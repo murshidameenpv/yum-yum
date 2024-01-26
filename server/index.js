@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from 'cors'
 import "./src/db/db.js";
-import userRoutes from './src/routes/menuRoute.js'
+import menuRoute from './src/routes/menuRoute.js'
+import cartRoute from './src/routes/cartRoute.js'
 
 const app = express();
 dotenv.config();
@@ -13,7 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 //Load all routes
-app.use("/", userRoutes);
+app.use("/menu", menuRoute);
+app.use("/cart", cartRoute);
 
 
 

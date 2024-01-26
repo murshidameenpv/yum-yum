@@ -1,25 +1,32 @@
 import mongoose from "mongoose";
-const userSchema = new mongoose.Schema(
+const cartSchema = new mongoose.Schema(
   {
-    name: {
+    menuItemId: {
       type: String,
       required: true,
       unique: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
     email: {
       type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    profileImage: {
-      type: String,
-      default: "https://img.lovepik.com/element/45001/3052.png_300.png",
+      trim: true
     },
   },
   { timestamps: true }
 );
-const userDb = mongoose.model("User", userSchema);
-export default userDb;
+const cartDb = mongoose.model("Cart", cartSchema);
+export default cartDb;

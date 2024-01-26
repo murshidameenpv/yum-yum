@@ -14,53 +14,59 @@ function Cards({ item }) {
   const location = useLocation()
   // console.log(user);
   
-  //Add to cart function
-const handleAddToCart = (item) => {
-  // console.log(item);
-  if (isAuthenticated && user && user.email) {
-    const cartItems = {
-      menuItemId: _id,
-      name,
-      quantity: 1,
-      image,
-      price,
-      email: user.email,
-    };
-    // console.log(cartItems);
-    axios
-      .post("http://localhost:3000/cart", cartItems)
-      .then((response) => {
-        const data = response.data;
-        console.log(data);
-        if (data.insertedId)
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Item added to Cart!",
-            showConfirmButton: true,
-            confirmButtonColor: "#495e57",
-          });
-          refetch()
-      })
-      .catch((error) => {
-        console.error("Error Fetching Data", error);
+  const handleAddToCart = (item) => {
+    if (isAuthenticated && user && user.email) {
+      const cartItems = {
+        menuItemId: item._id,
+        name:item.name,
+        quantity: 1,
+        image:item.image,
+        price:item.price,
+        email: user.email,
+      };
+      axios
+        .post("http://localhost:3000/cart", cartItems)
+        .then((response) => {
+          const data = response.data;
+          if (data.message) {
+            Swal.fire({
+              position: "center",
+              icon: "info",
+              title: data.message,
+              showConfirmButton: true,
+              confirmButtonColor: "#495e57",
+            });
+          } else if (data.cartItem) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Item added to Cart!",
+              showConfirmButton: true,
+              confirmButtonColor: "#495e57",
+            });
+          }
+          refetch();
+        })
+        .catch((error) => {
+          console.error("Error Fetching Data", error);
+        });
+    } else {
+      Swal.fire({
+        title: "Please Sign Up",
+        text: "You need to be signed in to add items to your cart!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#495e57",
+        cancelButtonColor: "#952323",
+        confirmButtonText: "Sign Up",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/signup", { state: { from: location } });
+        }
       });
-  } else {
-    Swal.fire({
-      title: "Please Sign Up",
-      text: "You need to be signed in to add items to your cart!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#495e57",
-      cancelButtonColor: "#952323",
-      confirmButtonText: "Sign Up",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/signup", { state: { from: location } });
-      }
-    });
-  }
-};
+    }
+  };
+
 
   
   const [isHeartFilled, setHeartFilled] = useState(false)
