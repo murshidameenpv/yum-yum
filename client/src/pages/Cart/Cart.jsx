@@ -21,19 +21,19 @@ function Cart() {
       cancelButtonColor: "#952323",
       confirmButtonText: "Yes, Remove From Cart!",
     }).then(async (result) => {
-      // Make this function async
       if (result.isConfirmed) {
         try {
           const response = await axios.delete(
             `http://localhost:3000/cart/${item._id}`
           );
+          
           const data = response.data;
           // console.log(data,"delete cart item");
-          if (data.deletedCount > 0) {
+          if (data) {
             Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
+              title: data.title,
+              text: data.message,
+              icon: data.icon,
               confirmButtonColor: "#495e57",
             });
             refetch(); // Refetch the cart items,it will update the cart items comes fro custom hook
@@ -66,8 +66,8 @@ function Cart() {
     })
     refetch()
     setCartItems(updatedCart)
-    const data = response.data;
-    console.log(data);
+    // const data = response.data;
+    // console.log(data);
   } catch (error) {
     console.error(error);
   }
@@ -89,8 +89,8 @@ function Cart() {
       });
       refetch();
       setCartItems(updatedCart);
-    const data = response.data;
-    console.log(data);
+    // const data = response.data;
+    // console.log(data);
   } catch (error) {
     console.error(error);
   }

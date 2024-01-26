@@ -7,64 +7,81 @@ import Swal from "sweetalert2";
 import useCart from '../hooks/useCart';
 
 function Cards({ item }) {
-  const {_id,name,image,price} = item
   const { user, isAuthenticated } = useContext(AuthContext)
   const [cart, refetch] = useCart();
   const navigate = useNavigate()
   const location = useLocation()
   // console.log(user);
-  
+
+
   const handleAddToCart = (item) => {
-    if (isAuthenticated && user && user.email) {
-      const cartItems = {
-        menuItemId: item._id,
-        name:item.name,
-        quantity: 1,
-        image:item.image,
-        price:item.price,
-        email: user.email,
-      };
-      axios
-        .post("http://localhost:3000/cart", cartItems)
-        .then((response) => {
-          const data = response.data;
-          if (data.message) {
-            Swal.fire({
-              position: "center",
-              icon: "info",
-              title: data.message,
-              showConfirmButton: true,
-              confirmButtonColor: "#495e57",
-            });
-          } else if (data.cartItem) {
-            Swal.fire({
-              position: "center",
-              icon: "success",
-              title: "Item added to Cart!",
-              showConfirmButton: true,
-              confirmButtonColor: "#495e57",
-            });
-          }
-          refetch();
-        })
-        .catch((error) => {
-          console.error("Error Fetching Data", error);
-        });
-    } else {
-      Swal.fire({
-        title: "Please Sign Up",
-        text: "You need to be signed in to add items to your cart!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#495e57",
-        cancelButtonColor: "#952323",
-        confirmButtonText: "Sign Up",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate("/signup", { state: { from: location } });
-        }
-      });
+    if (!isAuthenticated || !user || !user.email) {
+      showSignUpAlert();
+      return;
     }
+    const cartItems = createCartItem(item, user.email);
+
+    axios
+      .post("http://localhost:3000/cart", cartItems)
+      .then(handleSuccessfulResponse)
+      .catch(console.error);
+  };
+
+  const createCartItem = (item, email) => ({
+    menuItemId: item._id,
+    name: item.name,
+    quantity: 1,
+    image: item.image,
+    price: item.price,
+    email,
+  });
+
+  const handleSuccessfulResponse = (response) => {
+    const data = response.data;
+
+    if (data.message) {
+      showInfoAlert(data.message);
+    } else if (data.cartItem) {
+      showSuccessAlert("Item added to Cart!");
+    }
+
+    refetch();
+  };
+
+  const showInfoAlert = (message) => {
+    Swal.fire({
+      position: "center",
+      icon: "info",
+      title: message,
+      showConfirmButton: true,
+      confirmButtonColor: "#495e57",
+    });
+  };
+
+  const showSuccessAlert = (message) => {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: message,
+      showConfirmButton: true,
+      confirmButtonColor: "#495e57",
+    });
+  };
+
+  const showSignUpAlert = () => {
+    Swal.fire({
+      title: "Please Sign Up",
+      text: "You need to be signed in to add items to your cart!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#495e57",
+      cancelButtonColor: "#952323",
+      confirmButtonText: "Sign Up",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/signup", { state: { from: location } });
+      }
+    });
   };
 
 

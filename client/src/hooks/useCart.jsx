@@ -11,7 +11,7 @@ function useCart() {
       try {
         const response = await axios.get(
           `http://localhost:3000/cart?email=${user?.email}`);
-        return response.data;
+        return response.data?.cart;
       } catch (error) {
         console.error(error);
         throw new Error("Network response was not ok");
