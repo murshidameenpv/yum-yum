@@ -4,6 +4,8 @@ import cors from 'cors'
 import "./src/db/db.js";
 import menuRoute from './src/routes/menuRoute.js'
 import cartRoute from './src/routes/cartRoute.js'
+import userRoute from './src/routes/userRoute.js'
+
 
 const app = express();
 dotenv.config();
@@ -16,6 +18,7 @@ app.use(cors())
 //Load all routes
 app.use("/menu", menuRoute);
 app.use("/cart", cartRoute);
+app.use("/users", userRoute);
 
 
 
