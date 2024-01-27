@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom';
 import { RiDashboardFill, RiCustomerService2Fill } from "react-icons/ri";
-import { FaUsers,FaUser,FaHome , FaShoppingBag, FaLocationArrow } from "react-icons/fa";
+import { FaUsers,FaHome , FaShoppingBag, FaLocationArrow } from "react-icons/fa";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { MdEditDocument, MdMenuBook } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { IoLogOutSharp } from "react-icons/io5";
 const logo = "/home/logo.png";
 
 const sharedLinks = (
@@ -33,6 +34,12 @@ const sharedLinks = (
         Customer Support
       </Link>
     </li>
+    <li>
+      <button to="/support">
+        <IoLogOutSharp />
+        Logout
+      </button>
+    </li>
   </>
 );
 
@@ -41,21 +48,19 @@ function AdminLayout() {
   
   return (
     <div>
-      <div className="drawer sm:drawer-open">
+      <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col sm:items-start sm:justify-start  ">
           {/* Page content here */}
-          <div className="flex items-center justify-between mx-4">
-            <label
+          <div className="">
+            <div>
+              <label
               htmlFor="my-drawer-2"
-              className="btn drawer-button sm:hidden text-white bg-green"
+              className="btn drawer-button lg:hidden text-white bg-green"
             >
               <GiHamburgerMenu />
             </label>
-            <button className="btn bg-green text-white rounded-full px-6 sm:hidden">
-              <FaUser />
-              Logout
-            </button>
+            </div>
           </div>
           <div className="mt-5 md:mt-3 mx-4">
             <Outlet />
