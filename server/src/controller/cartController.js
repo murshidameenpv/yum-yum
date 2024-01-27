@@ -80,7 +80,7 @@ export const updateCartQuantity = async (req, res) => {
          if (!updateCart) {
            return res.status(401).json({message:"Cart Item Not found"})
          }
-         console.log(updateCart,"Updated cart");
+        //  console.log(updateCart,"Updated cart");
          return res.status(201).json({updateCart})
 
       } catch (error) {

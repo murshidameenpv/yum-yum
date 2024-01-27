@@ -15,7 +15,7 @@ function AuthProvider({ children }) {
     
     //create an account
     const createUser = (email, password) => {
-        return createUserWithEmailAndPassword(auth, email, password)
+        return createUserWithEmailAndPassword(auth, email, password )
     }
 
     //signup with gmail account

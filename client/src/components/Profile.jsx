@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../contexts/AuthProvider";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Profile({ user }) {
   // console.log(user.photoURL),"URL OF THE PHOTO";
@@ -64,6 +64,11 @@ function Profile({ user }) {
             </li>
             <li>
               <a>Settings</a>
+            </li>
+            <li>
+              <Link to="/admin">
+                Dashboard
+              </Link>
             </li>
             <li>
               <a onClick={handleLogout}>Logout</a>
