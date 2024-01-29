@@ -54,7 +54,9 @@ function AuthProvider({ children }) {
           const userInfo  = {email:currentUser.email}
           axios.post("http://localhost:3000/jwt", userInfo)
             .then((response) => {
-              console.log(response.data, "qqqqqqqqqq")
+              if (response.data.token) {
+               localStorage.setItem("access_token",response.data.token)
+             }
             })
           setIsAuthenticated(true); // User is authenticated
         } else {
