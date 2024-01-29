@@ -3,7 +3,7 @@ import { createUser, deleteUser, getAdmin, getAllUsers, makeAdmin } from "../con
 import { verifyToken } from "../middleware/verify.js";
 const router = express.Router();
 //get all menu
-router.get("/",verifyToken,getAllUsers);
+router.get("/",getAllUsers);
 router.post("/", createUser)
 router.delete("/:id", deleteUser)
 router.get("/:email", getAdmin)

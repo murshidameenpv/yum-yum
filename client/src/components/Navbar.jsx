@@ -13,7 +13,7 @@ function Navbar() {
   // This function checks the vertical scroll position of the window (window.scrollY). If the scroll position is greater than 0, it means the user has scrolled down, and isSticky is set to true. If the scroll position is 0 (top of the page), isSticky is set to false.
   const [isSticky, setSticky] = useState(false)
   const { user, isAuthenticated } = useContext(AuthContext);
-  console.log(user,"oooooooooooooooo");
+  // console.log(user,"oooooooooooooooo");
   
   //calling custom hook to fetch data
   const [cart, refetch] = useCart()

@@ -4,12 +4,14 @@ import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import { AuthContext } from "../contexts/AuthProvider";
+import axios from "axios";
 
 function Signup() {
   //register is the core api of this hook which allows us to register inpu fields to the formhook
   const { register, handleSubmit } = useForm();
 
-  const { createUser, login } = useContext(AuthContext);
+  const { createUser, signUpWithGmail, updateUserProfile } =
+    useContext(AuthContext);
 
   //redirecting to home or specific page
   const navigate = useNavigate();
@@ -20,17 +22,48 @@ function Signup() {
   const onSubmit = (data) => {
     // console.log(data)
     const { email, password } = data;
+
     createUser(email, password)
       .then((result) => {
         const user = result.user;
-        alert("Successfully Created Account");
-         document.getElementById("my_modal_5").close();
-         navigate(from, { replace: true });
+        updateUserProfile(data.email, data.photoURL)
+          .then(() => {
+            const userInfo = {
+              name: data.name,
+              email:data.email
+            }
+            axios
+              .post("http://localhost:3000/users", userInfo)
+              .then((response) => {
+                alert("Successfully Created Account");
+                navigate(from, { replace: true });
+              });
+        })
+       
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+
+  const handleRegister = () => {
+    signUpWithGmail()
+      .then((result) => {
+        const user = result.user
+          console.log(user,"------------");
+        const userInfo = {
+          name: result?.user?.displayName,
+          email: result?.user?.email,
+        };
+        axios.post("http://localhost:3000/users",userInfo)
+          .then((response) => {
+           alert("Successfully Created Account");
+          navigate('/')
+          });
+      })
+      .catch((error) => console.error(error))
+  }
   return (
     <div className="max-w-lg bg-white shadow w-full mx-auto flex items-center justify-center my-20">
       <div className="modal-action mt-0 flex flex-col justify-center">
@@ -40,6 +73,18 @@ function Signup() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <h3 className="font-bold text-lg">Create an Account</h3>
+          {/* name */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Name</span>
+            </label>
+            <input
+              type="name"
+              placeholder="Your name"
+              className="input input-bordered"
+              {...register("name")}
+            />
+          </div>
           {/* Email */}
           <div className="form-control">
             <label className="label">
@@ -80,13 +125,9 @@ function Signup() {
           </div>
           <p className="text-center my-2">
             Have an account ?
-            <button
-              type="button"
-              className="text-brown underline ml-1"
-              onClick={() => document.getElementById("my_modal_5").showModal()}
-            >
-              Login Now
-            </button>
+            <Link to="/login">
+              <button className="ml-2 underline text-brown">Login here</button>
+            </Link>
           </p>
           <Link
             to="/"
@@ -97,7 +138,10 @@ function Signup() {
         </form>
         {/* social signing */}
         <div className="text-center space-x-3 mb-5">
-          <button className="btn btn-circle hover:bg-green hover:text-white">
+          <button
+            className="btn btn-circle hover:bg-green hover:text-white"
+            onClick={handleRegister}
+          >
             <FaGoogle />
           </button>
           <button className="btn btn-circle hover:bg-green hover:text-white">

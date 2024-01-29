@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../contexts/AuthProvider";
+import axios from "axios";
 function Modal() {
   //register is the core api of this hook which allows us to register inpu fields to the formhook
   const { 
@@ -23,33 +24,39 @@ function Modal() {
   const onSubmit = (data) => {
     const { email, password } = data;
     //  console.log(email,password);
-    login(email,password).then((result) => {
-    // Signed in 
-    const user = result.user;
-      alert("Login Successf ul")
-      document.getElementById("my_modal_5").close();
-      navigate(from, { replace:true})
-  })
-  .catch((error) => {
-    console.error(error);
-    setErrorMessage("Provide a valid email and password");
-  });
+      login(email, password).then((result) => {
+        const user = result.user;
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        };
+        axios.post("http://localhost:3000/users").then((response) => {
+          alert("Signing Successful ");
+          navigate(from, { replace: true });
+        });
+      });
   } ;
 
   
 
   //google Login / signup 
-  const handleLogin = () => {
-    signUpWithGmail().then((result) => {
-      const user = result.user;
-      document.getElementById("my_modal_5").close();
-      navigate(from, { replace: true });
-      alert("Signup Successful")
-    }).catch((error) => {
-      // Handle Errors here.
-      console.error(error);
-    })
-  };
+   const handleRegister = () => {
+     signUpWithGmail()
+       .then((result) => {
+         const user = result.user;
+         const userInfo = {
+           name: result?.user?.displayName,
+           email: result?.user?.email,
+         };
+         axios
+           .post("http://localhost:3000/users", userInfo)
+           .then((response) => {
+             alert("Successfully Created Account");
+             navigate("/");
+           });
+       })
+       .catch((error) => console.error(error));
+   };
 
   return (
     <dialog id="my_modal_5" className="modal modal-middle sm:modal-middle">
@@ -91,7 +98,9 @@ function Modal() {
               </label>
             </div>
             {/* Error Message */}
-            {errorMessage && <p className="text-rose-800 text-sm italic">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="text-rose-800 text-sm italic">{errorMessage}</p>
+            )}
             {/* login button */}
             <div className="form-control mt-6">
               <input
@@ -100,12 +109,7 @@ function Modal() {
                 className="btn bg-green text-white"
               />
             </div>
-            <p className="text-center my-2">
-              Don&apos;t have an account ?
-              <Link to="/signup" className="text-brown underline ml-1">
-                Signup Now
-              </Link>
-            </p>
+
             {/* if there is a button in form , it will close the modal also it will go to top right cornor */}
             <button
               type="button"
@@ -116,10 +120,20 @@ function Modal() {
               ✕
             </button>
           </form>
+          <div>
+            <p className="text-center my-2">
+              Don&apos;t have an account ?
+              <Link to="/signup" className="underline text-brown ml-1">
+                Signup Now
+              </Link>
+            </p>
+          </div>
           {/* social signing */}
           <div className="text-center space-x-3 mb-3">
-            <button className="btn btn-circle hover:bg-green hover:text-white"
-            onClick={handleLogin}>
+            <button
+              className="btn btn-circle hover:bg-green hover:text-white"
+              onClick={handleRegister}
+            >
               <FaGoogle />
             </button>
             <button className="btn btn-circle hover:bg-green hover:text-white">
