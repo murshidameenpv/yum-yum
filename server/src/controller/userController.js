@@ -7,7 +7,7 @@ export const getAllUsers = async (req, res) => {
     if (!users) {
       return res.status(404).json({ message: "Users not found" });
     }
-    res.status(201).json({ users });
+    res.status(201).json(users);
   } catch (error) {
     console.error(error);
     res.status(500).send("Error fetching users");

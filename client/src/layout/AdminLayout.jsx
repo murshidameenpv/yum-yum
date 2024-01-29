@@ -7,6 +7,8 @@ import { MdEditDocument, MdMenuBook } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoLogOutSharp } from "react-icons/io5";
 import Login from '../components/Login';
+import useAdmin from '../hooks/useAdmin';
+import useAuth from '../hooks/useAuth';
 const logo = "/home/logo.png";
 
 const sharedLinks = (
@@ -43,10 +45,11 @@ const sharedLinks = (
     </li>
   </>
 );
-const isAdmin  = false
 
 function AdminLayout() {
   
+    const { loading } = useAuth();
+    const [isAdmin, isAdminLoading] = useAdmin();
   return (
     <div>
       {isAdmin ?   <div>
