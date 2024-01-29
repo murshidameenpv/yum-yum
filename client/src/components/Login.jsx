@@ -2,15 +2,17 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../contexts/AuthProvider";
 import axios from "axios";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from "../hooks/useAuth";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
-  const { signUpWithGmail,login } =useContext(AuthContext);
+  const { signUpWithGmail,login } = useAuth()
 
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosPublic = useAxiosPublic()
 
   const from = location.state?.from?.pathname || "/";
 
@@ -32,7 +34,7 @@ const Login = () => {
           name: data.name,
           email:data.email
         }
-        axios.post("http://localhost:3000/users").then((response) => {
+        axiosPublic.post("/users").then((response) => {
           alert(" Signing Successful");
           navigate(from, { replace: true });
         });
@@ -48,7 +50,7 @@ const Login = () => {
           name: result?.user?.displayName,
           email: result?.user?.email,
         };
-        axios.post("http://localhost:3000/users", userInfo).then((response) => {
+        axiosPublic.post("/users", userInfo).then((response) => {
           alert("Successfully Created Account");
           navigate("/");
         });

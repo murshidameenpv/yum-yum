@@ -2,17 +2,17 @@ import React, { useContext, useEffect, useState } from "react";
 import logo from "/home/logo.png";
 import { FaRegUser } from "react-icons/fa";
 import Modal from "./Modal";
-import { AuthContext } from "../contexts/AuthProvider";
 import Profile from "./Profile";
 import { Link } from "react-router-dom";
 import useCart from "../hooks/useCart";
+import useAuth from "../hooks/useAuth";
 
 
 function Navbar() {
   // Handle scroll functions
   // This function checks the vertical scroll position of the window (window.scrollY). If the scroll position is greater than 0, it means the user has scrolled down, and isSticky is set to true. If the scroll position is 0 (top of the page), isSticky is set to false.
   const [isSticky, setSticky] = useState(false)
-  const { user, isAuthenticated } = useContext(AuthContext);
+  const { user, isAuthenticated } = useAuth()
   // console.log(user,"oooooooooooooooo");
   
   //calling custom hook to fetch data

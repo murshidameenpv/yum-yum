@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
 import { AuthContext } from "../contexts/AuthProvider";
 import axios from "axios";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 function Signup() {
   //register is the core api of this hook which allows us to register inpu fields to the formhook
@@ -12,6 +13,7 @@ function Signup() {
 
   const { createUser, signUpWithGmail, updateUserProfile } =
     useContext(AuthContext);
+  const axiosPublic = useAxiosPublic
 
   //redirecting to home or specific page
   const navigate = useNavigate();
@@ -22,7 +24,6 @@ function Signup() {
   const onSubmit = (data) => {
     // console.log(data)
     const { email, password } = data;
-
     createUser(email, password)
       .then((result) => {
         const user = result.user;
@@ -32,8 +33,8 @@ function Signup() {
               name: data.name,
               email:data.email
             }
-            axios
-              .post("http://localhost:3000/users", userInfo)
+            axiosPublic
+              .post("/users", userInfo)
               .then((response) => {
                 alert("Successfully Created Account");
                 navigate(from, { replace: true });
@@ -56,7 +57,7 @@ function Signup() {
           name: result?.user?.displayName,
           email: result?.user?.email,
         };
-        axios.post("http://localhost:3000/users",userInfo)
+        axiosPublic.post("/users",userInfo)
           .then((response) => {
            alert("Successfully Created Account");
           navigate('/')

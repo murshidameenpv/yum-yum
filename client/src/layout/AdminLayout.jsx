@@ -6,6 +6,7 @@ import { IoAddCircleSharp } from "react-icons/io5";
 import { MdEditDocument, MdMenuBook } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoLogOutSharp } from "react-icons/io5";
+import Login from '../components/Login';
 const logo = "/home/logo.png";
 
 const sharedLinks = (
@@ -42,12 +43,13 @@ const sharedLinks = (
     </li>
   </>
 );
-
+const isAdmin  = false
 
 function AdminLayout() {
   
   return (
     <div>
+      {isAdmin ?   <div>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col sm:items-start sm:justify-start  ">
@@ -115,7 +117,11 @@ function AdminLayout() {
           </ul>
         </div>
       </div>
-    </div>
+      </div> 
+        :
+        <Login />
+      }
+  </div>
   );
 }
 

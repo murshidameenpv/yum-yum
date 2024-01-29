@@ -5,12 +5,19 @@ import axios from "axios";
 //This custom hook is used to fetch cart item of user using their email
 function useCart() {
   const { user } = useContext(AuthContext);
+  const token = localStorage.getItem('access_token')
   const { refetch,data: cart = [] } = useQuery({
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/cart?email=${user?.email}`);
+          `http://localhost:3000/cart?email=${user?.email}`,
+          {
+            headers: {
+              authorization: `Barer ${token}`
+            },
+          }
+        );
         return response.data?.cart;
       } catch (error) {
         console.error(error);
