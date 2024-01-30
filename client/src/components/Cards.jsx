@@ -1,18 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, {  useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaHeart } from 'react-icons/fa'
-import { AuthContext } from '../contexts/AuthProvider';
-import axios from "axios";
 import Swal from "sweetalert2";
 import useCart from '../hooks/useCart';
-
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from '../hooks/useAuth';
 function Cards({ item }) {
-  const { user, isAuthenticated } = useContext(AuthContext)
+  const {user,isAuthenticated} = useAuth()
   const [cart, refetch] = useCart();
   const navigate = useNavigate()
   const location = useLocation()
+  const axiosPublic = useAxiosPublic();
   // console.log(user);
-
 
   const handleAddToCart = (item) => {
     if (!isAuthenticated || !user || !user.email) {
@@ -21,8 +20,8 @@ function Cards({ item }) {
     }
     const cartItems = createCartItem(item, user.email);
 
-    axios
-      .post("http://localhost:3000/cart", cartItems)
+    axiosPublic
+      .post("/cart", cartItems)
       .then(handleSuccessfulResponse)
       .catch(console.error);
   };

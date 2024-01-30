@@ -1,7 +1,8 @@
 
 import userDb from "../model/userSchema.js";
 export const verifyAdmin = async (req, res, next) => {
-    const { email } = req.decoded.email
+    const { email } = req.decoded
+    console.log(email,"email");
     const query = { email: email }
     try {
         const user = await userDb.findOne(query)

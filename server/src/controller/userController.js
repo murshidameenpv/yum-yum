@@ -14,23 +14,21 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-//post users
 export const createUser = async (req, res) => {
-  const user = req.body;
-  const query = { email: user.email };
+  const { email, name } = req.body;
+  const query = { email: email };
   try {
     const userExist = await userDb.findOne(query);
     if (userExist) {
       return res.status(302).json({ message: "User already Exist" });
     }
-    const result = await userDb.create(user);
-    return res.status(201).json({result});
+    const result = await userDb.create({ email, name }); // Use email and name to create user
+    return res.status(201).json({ result });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error creating new user");
   }
 };
-
 
 //delete user
 export const deleteUser = async (req, res) => {

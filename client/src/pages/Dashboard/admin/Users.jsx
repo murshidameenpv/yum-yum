@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import React from 'react'
 import { MdDelete } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
@@ -13,6 +12,7 @@ function Users() {
      queryFn: async () => {
        try {
          const response = await axiosSecure.get('/users')
+        //  console.log(response,"ooooooooooooooooo");
          return response.data;
        } catch (error) {
          console.error(error);

@@ -9,8 +9,9 @@ function useAdmin() {
        queryKey: [user?.email,'isAdmin'],
        queryFn: async () => {
          try {
-             const response = await axiosSecure.get(`/user/admin/${user?.email}`)
-             console.log(response.data?.admin)
+             const response = await axiosSecure.get(`/users/admin/${user?.email}`)
+           console.log(response.data?.admin, "ppppppppppppppppp");
+            return response.data?.admin;
          } catch (error) {
            console.error(error);
            throw new Error("Network response was not ok");

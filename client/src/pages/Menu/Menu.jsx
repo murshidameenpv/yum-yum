@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import Cards from '../../components/Cards';
 import { FaFilter } from 'react-icons/fa'
-import axios from "axios";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+
 function Menu() {
   const [menu, setMenu] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
   // console.log(selectedCategory,"ppppppppppppppp");
   const [sortOption, setSortOption] = useState("default");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const axiosPublic = useAxiosPublic()
   //loading data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/menu");
+        const response = await axiosPublic.get("/menu");
         const data = response.data;
         const { menus } = data;
          // console.log(data);

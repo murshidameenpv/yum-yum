@@ -37,7 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <PrivateRouter>
+            <Cart />
+          </PrivateRouter>
+        ),
       },
     ],
   },
@@ -52,17 +56,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <PrivateRouter><AdminLayout /></PrivateRouter>,
+    element: (
+      <PrivateRouter>
+        <AdminLayout />
+      </PrivateRouter>
+    ),
     children: [
       {
         path: "",
-        element: <Dashboard/>
+        element: <Dashboard />,
       },
       {
         path: "users",
-        element:<Users/>
-      }
-    ]
+        element: <Users />,
+      },
+    ],
   },
 ]);
 export default router;

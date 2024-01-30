@@ -3,51 +3,48 @@ import { useForm } from "react-hook-form";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Modal from "./Modal";
-import { AuthContext } from "../contexts/AuthProvider";
-import axios from "axios";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from "../hooks/useAuth";
 
 function Signup() {
   //register is the core api of this hook which allows us to register inpu fields to the formhook
   const { register, handleSubmit } = useForm();
-
-  const { createUser, signUpWithGmail, updateUserProfile } =
-    useContext(AuthContext);
-  const axiosPublic = useAxiosPublic
+ const { createUser, signUpWithGmail, updateUserProfile } = useAuth();
+  const axiosPublic = useAxiosPublic()
 
   //redirecting to home or specific page
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  // Signed up
-  const onSubmit = (data) => {
-    // console.log(data)
-    const { email, password } = data;
-    createUser(email, password)
-      .then((result) => {
-        const user = result.user;
-        updateUserProfile(data.email, data.photoURL)
-          .then(() => {
-            const userInfo = {
-              name: data.name,
-              email:data.email
-            }
-            axiosPublic
-              .post("/users", userInfo)
-              .then((response) => {
-                alert("Successfully Created Account");
-                navigate(from, { replace: true });
-              });
-        })
-       
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+const onSubmit = (data) => {
+  const { email, password, name } = data;
 
-
+  createUser(email, password)
+    .then((result) => {
+      if (result.user && result.user.email) {
+        const userInfo = { email: result.user.email, name: name };
+        console.log(userInfo,'user inffoooooooo');
+        axiosPublic
+          .post("/users", userInfo)
+          .then((response) => {
+            console.log(response.data);
+            alert("Signup successful!");
+            navigate("/");
+          })
+          .catch((error) => {
+            console.error("Error posting user data:", error);
+          });
+      } else {
+        console.error("User creation unsuccessful, no email found.");
+      }
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error("Error creating user:", errorCode, errorMessage);
+    });
+};
   const handleRegister = () => {
     signUpWithGmail()
       .then((result) => {

@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaFacebook, FaGithub, FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../contexts/AuthProvider";
-import axios from "axios";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import useAuth from "../hooks/useAuth";
 function Modal() {
   //register is the core api of this hook which allows us to register inpu fields to the formhook
   const { 
@@ -11,14 +11,14 @@ function Modal() {
     handleSubmit,
   } = useForm();
   
-  const { signUpWithGmail, login } = useContext(AuthContext);
+  const { signUpWithGmail, login } = useAuth();
   const [errorMessage, setErrorMessage] = useState("")
-
   //redirecting to home or specific page
   const navigate = useNavigate()
   const location = useLocation()
   // console.log(location,"oooooooooooooo");
   const from = location.state?.from?.pathname || "/"
+  const axiosPublic = useAxiosPublic()
 
 //login
   const onSubmit = (data) => {
@@ -30,7 +30,7 @@ function Modal() {
           name: data.name,
           email: data.email,
         };
-        axios.post("http://localhost:3000/users").then((response) => {
+        axiosPublic.post("/users").then((response) => {
           alert("Signing Successful ");
           navigate(from, { replace: true });
         });
@@ -48,8 +48,8 @@ function Modal() {
            name: result?.user?.displayName,
            email: result?.user?.email,
          };
-         axios
-           .post("http://localhost:3000/users", userInfo)
+         axiosPublic
+           .post("/users", userInfo)
            .then((response) => {
              alert("Successfully Created Account");
              navigate("/");
