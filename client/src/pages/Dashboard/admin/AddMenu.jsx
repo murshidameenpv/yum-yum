@@ -1,21 +1,74 @@
-import React from 'react'
-import { useForm } from 'react-hook-form';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { MdRestaurantMenu } from "react-icons/md";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 function AddMenu() {
-    //image hosting api key
-    const IMGBB_KEY = import.meta.env.VITE_IMGBB_APIKEY;
-    console.log(IMGBB_KEY);
+  //image hosting api key
+  const IMGBB_APKEY = import.meta.env.VITE_IMGBB_APIKEY;
+  // console.log(IMGBB_APKEY);
+  const IMGBB_URL = `https://api.imgbb.com/1/upload?key=${IMGBB_APKEY}`;
+    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure()
+    const [loading, setLoading] = useState(false);
+    const {
+      reset,
+    register,
+    handleSubmit,
+    formState: { errors },} = useForm();
+    const onSubmit = async (data) => {
+       setLoading(true);
+    try {
+      const imageData = new FormData();
+      imageData.append("image", data.image[0]);
 
-const {
-  register,
-  handleSubmit,
-  watch,
-  formState: { errors },
-    } = useForm();
-    
-    const onSubmit = (data) => {
-        console.log(data);
-    }
+      const result = await axiosPublic.post(IMGBB_URL, imageData    , {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (result.data.success) {
+        const menuItem = {
+          name: data.name,
+          recipe: data.recipe,
+          image: result.data?.data?.display_url,
+          category: data.category,
+          price: parseFloat(data.price),
+        };
+
+        const addMenu = await axiosSecure.post("/menu", menuItem);
+
+        if (addMenu.status === 201) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: addMenu.data.message,
+            showConfirmButton: true,
+            confirmButtonColor: "#495e57",
+          });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Error adding item to menu",
+        text: error.message,
+        showConfirmButton: true,
+        confirmButtonColor: "#495e57",
+      });
+        setLoading(false);
+        reset()
+        }
+    finally {
+        setLoading(false);
+        reset()
+        }
+  };
+
   return (
     <div className="w-full md:w-[720px] px-4 mx-auto">
       <h2 className="font-bold text-2xl my-4">
@@ -90,14 +143,19 @@ const {
               className="file-input file-input-bordered w-full max-w-xs"
             />
           </div>
-          <button className="btn bg-green text-white px-6">
-            <MdRestaurantMenu />
-            Add Item
-          </button>
+          {loading ? (
+            <div className="loader">
+              <span className="loading loading-dots loading-lg"></span>
+            </div>
+          ) : (
+            <button className="btn bg-green text-white px-6">
+              <MdRestaurantMenu />
+              Add Item
+            </button>
+          )}
         </form>
       </div>
     </div>
   );
 }
-
-export default AddMenu
+export default AddMenu;
