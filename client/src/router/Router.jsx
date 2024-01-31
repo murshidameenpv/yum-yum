@@ -11,6 +11,7 @@ import AdminLayout from "../layout/AdminLayout";
 import Dashboard from "../pages/Dashboard/admin/Dashboard";
 import Users from "../pages/Dashboard/admin/Users";
 import Login from "../components/Login";
+import AddMenu from "../pages/Dashboard/admin/AddMenu";
 
 //This is the root path,every routes will start from here
 // whatever element goes as its children it will go to the  outlet in Main
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: "users",
         element: <Users />,
+      },
+      {
+        path: "add-menu",
+        element: <AddMenu />,
       },
     ],
   },

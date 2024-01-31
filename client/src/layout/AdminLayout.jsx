@@ -88,19 +88,19 @@ function AdminLayout() {
               </Link>
             </li>
             <li>
-              <Link to="/admin/users">
+              <Link to="/admin/manage-booking">
                 <FaShoppingBag />
                 Manage Bookings
               </Link>
             </li>
             <li>
-              <Link to="/admin/users">
+              <Link to="/admin/add-menu">
                 <IoAddCircleSharp />
                 Add Menu
               </Link>
             </li>
             <li>
-              <Link to="/admin/users">
+              <Link to="/admin/manage">
                 <MdEditDocument />
                 Manage Items
               </Link>
