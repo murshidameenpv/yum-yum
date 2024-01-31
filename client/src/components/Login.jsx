@@ -5,57 +5,54 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import useAuth from "../hooks/useAuth";
-
-const Login = () => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const { signUpWithGmail,login } = useAuth()
-
+function Login() {
+  const { signUpWithGmail, login } = useAuth();
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
-  const location = useLocation();
-  const axiosPublic = useAxiosPublic()
+  const from = useLocation().state?.from?.pathname || "/";
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const from = location.state?.from?.pathname || "/";
 
-  //react hook form
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
+    reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    const email = data.email
-    const password = data.password
-    login(email, password)
-      .then((result) => {
-        const user = result.user
-        const userInfo = {
-          name: data.name,
-          email:data.email
-        }
-        axiosPublic.post("/users").then((response) => {
-          alert(" Signing Successful");
-          navigate(from, { replace: true });
-        });
-    })
+  //login
+  const onSubmit = async (data) => {
+    try {
+      await axiosPublic.get("/users/login", {
+        params: { email: data.email },
+      });
+      // User found in your database
+      const result = await login(data.email, data.password);
+      console.log(result, "Firebase login result");
+      alert("Signing Successful");
+      navigate(from, { replace: true });
+      reset();
+      document.getElementById("my_modal_5").close();
+      setErrorMessage("");
+    } catch (error) {
+      console.log(error, "Error logging in");
+      setErrorMessage(error?.response?.data?.message);
+    }
   };
 
-
-  const handleRegister = () => {
-    signUpWithGmail()
-      .then((result) => {
-        const user = result.user;
-        const userInfo = {
-          name: result?.user?.displayName,
-          email: result?.user?.email,
-        };
-        axiosPublic.post("/users", userInfo).then((response) => {
-          alert("Successfully Created Account");
-          navigate("/");
-        });
-      })
-      .catch((error) => console.error(error));
+  const handleRegister = async () => {
+    try {
+      const result = await signUpWithGmail();
+      const userInfo = {
+        name: result?.user?.displayName,
+        email: result?.user?.email,
+      };
+      await axiosPublic.post("/users", userInfo);
+      alert("Signing Successful");
+      navigate("/");
+    } catch (error) {
+      console.error("Error registering:", error);
+    }
   };
   return (
     <div className="max-w-md bg-white shadow w-full mx-auto flex items-center justify-center my-20">
@@ -99,14 +96,9 @@ const Login = () => {
           </div>
 
           {/* show errors */}
-          {errorMessage ? (
-            <p className="text-red text-xs italic">
-              Provide a correct username & password.
-            </p>
-          ) : (
-            ""
+          {errorMessage && (
+            <p className="text-rose-800 text-sm italic">{errorMessage}</p>
           )}
-
           {/* submit btn */}
           <div className="form-control mt-4">
             <input
@@ -147,6 +139,6 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

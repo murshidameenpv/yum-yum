@@ -14,13 +14,30 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+//get  user for login
+export const login = async (req, res) => {
+   const email = req.query.email;
+   console.log(email, "oooooo");
+  try {
+    const user = await userDb.findOne({email});
+    if (!user) {
+      return res.status(403).json({ message: "Users not found" });
+    }
+    return res.status(201).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching users");
+  }
+};
+
+
 export const createUser = async (req, res) => {
   const { email, name } = req.body;
   const query = { email: email };
   try {
     const userExist = await userDb.findOne(query);
     if (userExist) {
-      return res.status(302).json({ message: "User already Exist" });
+      return res.status(200).json({ message: "User already Exist" });
     }
     const result = await userDb.create({ email, name }); // Use email and name to create user
     return res.status(201).json({ result });
