@@ -1,17 +1,18 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../contexts/AuthProvider";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import useAxiosPublic from "./useAxiosPublic";
 //This custom hook is used to fetch cart item of user using their email
 function useCart() {
   const { user } = useContext(AuthContext);
   const token = localStorage.getItem('access_token')
+  const axiosPublic = useAxiosPublic()
   const { refetch,data: cart = [] } = useQuery({
     queryKey: ["cart", user?.email],
     queryFn: async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/cart?email=${user?.email}`,
+        const response = await axiosPublic.get(
+          `/cart?email=${user?.email}`,
           {
             headers: {
               authorization: `Barer ${token}`

@@ -100,7 +100,7 @@ function AdminLayout() {
               </Link>
             </li>
             <li>
-              <Link to="/admin/manage">
+              <Link to="/admin/manage-items">
                 <MdEditDocument />
                 Manage Items
               </Link>
