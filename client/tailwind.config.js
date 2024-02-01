@@ -8,6 +8,7 @@ export default {
         primaryBg: "#FCFCFC",
         red: "#FF6868",
         brown: "#9E6F21",
+        "custom-purple": "rgb(125, 111, 227)",
       },
     },
   },

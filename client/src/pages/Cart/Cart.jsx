@@ -6,11 +6,13 @@ import axios from 'axios'
 import { AuthContext } from '../../contexts/AuthProvider';
 import { IoMdAdd, } from "react-icons/io";
 import { RiSubtractFill } from "react-icons/ri";
-
+import { Link } from 'react-router-dom';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 function Cart() {
   const [cart, refetch] = useCart()
   const { user, isAuthenticated } = useContext(AuthContext)
-  const [cartItems ,setCartItems] = useState([])
+  const [cartItems, setCartItems] = useState([])
+  const axiosPublic = useAxiosPublic()
   // console.log(cart,"cart items in cart page");
   const handleDelete = (item) => {
     Swal.fire({
@@ -23,8 +25,8 @@ function Cart() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await axios.delete(
-            `http://localhost:3000/cart/${item._id}`
+          const response = await axiosPublic.delete(
+           `/cart/${item._id}`
           );
           
           const data = response.data;
@@ -106,7 +108,7 @@ function Cart() {
   
 
   return (
-    <div className="section-container ">
+    <div className="section-container">
       <div className="max-w-screen-2xl section-container bg-gradient-to-r from-[#FAFAFA] from-0% to-[#FCFCFC] to-100%">
         <div className="py-36 flex flex-col  justify-center items-center gap-8">
           {/* texts */}
@@ -205,9 +207,9 @@ function Cart() {
               <p className="font-semibold">
                 {`Total Price : ${cartSubTotal.toFixed(2)}`}
               </p>
-              <button className="bg-green btn text-white">
+              <Link to="/proceed-checkout" className="bg-green btn text-white">
                 Proceed To Checkout
-              </button>
+              </Link>
             </div>
           </div>
         </>

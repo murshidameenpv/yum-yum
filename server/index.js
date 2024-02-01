@@ -7,6 +7,7 @@ import menuRoute from './src/routes/menuRoute.js'
 import cartRoute from './src/routes/cartRoute.js'
 import userRoute from './src/routes/userRoute.js'
 import authRoute from './src/routes/authRoute.js'
+import stripeIntent from './src/routes/stripeIntent.js'
 
 
 const app = express();
@@ -24,6 +25,9 @@ app.use("/cart", cartRoute);
 app.use("/users", userRoute);
 //Authorization
 app.use("/jwt", authRoute);
+
+//stripe
+app.use("/stripe",stripeIntent);
 
 
 

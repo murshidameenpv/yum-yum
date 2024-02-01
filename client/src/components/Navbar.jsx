@@ -35,21 +35,8 @@ function Navbar() {
       <li>
         <a href="/">Home</a>
       </li>
-      <li tabIndex={0}>
-        <details>
-          <summary>Menu</summary>
-          <ul className="p-2">
-            <li>
-              <a href="/menu">All</a>
-            </li>
-            <li>
-              <a>Salad</a>
-            </li>
-            <li>
-              <a>Pizza</a>
-            </li>
-          </ul>
-        </details>
+      <li>
+        <a href="/menu">Menu</a>
       </li>
       <li tabIndex={0}>
         <details>
@@ -70,8 +57,8 @@ function Navbar() {
       <li>
         <a>Offers</a>
       </li>
-      </>
-    );
+    </>
+  );
 
 
   return (

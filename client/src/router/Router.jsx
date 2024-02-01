@@ -14,6 +14,7 @@ import Login from "../components/Login";
 import AddMenu from "../pages/Dashboard/admin/AddMenu";
 import ManageItems from "../pages/Dashboard/admin/ManageItems";
 import UpdateMenu from "../pages/Dashboard/admin/UpdateMenu";
+import Payment from "../pages/Checkout/Payment";
 
 
 //This is the root path,every routes will start from here
@@ -37,7 +38,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/update-profile",
-        element: <UpdateProfile />,
+        element: (
+          <PrivateRouter>
+            <UpdateProfile />
+          </PrivateRouter>
+        ),
       },
       {
         path: "/cart",
@@ -47,6 +52,12 @@ const router = createBrowserRouter([
           </PrivateRouter>
         ),
       },
+      {
+        path: "/proceed-checkout",
+        element: (<PrivateRouter><Payment/></PrivateRouter>
+          
+        )
+      }
     ],
   },
   //Signup page will no have header and footr so it wont have childs
@@ -58,6 +69,9 @@ const router = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
+  {},
+
+  //admin
   {
     path: "/admin",
     element: (
