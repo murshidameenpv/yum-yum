@@ -41,3 +41,35 @@ export const deleteMenuItem = async (req, res) => {
     res.status(500).send("Error Deleting item");
   }
 }
+
+//get single menu item
+export const getSingleMenuItem = async (req, res) => {
+   const menuId = req.params.id
+  try {
+    const menu = await menuDb.findById(menuId)
+    if (!menu) {
+      return res.status(404).json({message:"Menu not found"})
+    }
+    res.status(200).json(menu)
+  } catch (error) {
+    console.error(error);
+     res.status(500).send("Error fetching item");
+  }
+}
+ 
+//update single menu item
+export const updateSingleMenu = async (req, res) => {
+  const menuId = req.params.id;
+  const {_id,name,recipe,category,price,image} = req.body
+  try {
+    const updateMenu = await menuDb.findByIdAndUpdate(menuId,{_id,name,recipe,category,price,image},{new:true,runValidators:true});
+    if (!updateMenu) {
+      return res.status(404).json({ message: "Menu not found" });
+    }
+    res.status(200).json({message:"Item Updated"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error fetching item");
+  }
+};
+ 
