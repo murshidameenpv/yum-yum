@@ -37,7 +37,7 @@ cd client npm run dev
 <p>2. Clone the repo</p>
 
 ```
-https://github.com/murshidameenpv/E-commerce-project.git
+https://github.com/murshidameenpv/yum-yum.git
 ```
 
 <p>3. Add .env fileEnter your API in Both Client and Server Folders</p>
