@@ -10,30 +10,38 @@ function CheckoutForm({ price, cart }) {
   const elements = useElements();
   const [cardError, setCardError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
+  const [message, setMessage] = useState("");
   const user = useAuth();
-    const axiosSecure = useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
 
-useEffect(() => {
-  const createPaymentIntent = async () => {
-    try {
-      if (typeof price === "number" && price > 1) {
-        const response = await axiosSecure.post(
-          "/stripe/create-payment-intent",
-          { price }
-        );
-          setClientSecret(response.data?.clientSecret);
-      } else {
-        console.error("Price must be a number and greater than 1");
-        return;
-      }
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    if (!stripe) {
+      return;
     }
-  };
-  createPaymentIntent();
-}, [axiosSecure, price]);
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      "payment_intent_client_secret"
+    );
+    if (!clientSecret) {
+      return;
+    }
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent.status) {
+        case "succeeded":
+          setMessage("Payment Success");
+          break;
+        case "processing":
+          setMessage("Payment is processing..");
+          break;
+        case "requires_payment_method":
+          setMessage("Your Payment was not successful,Please try again");
+          break;
+        default:
+          setMessage("Something went wrong")
+      }
+    });
+  }, [stripe]);
 
-    console.log(clientSecret,"ooooooooooo");
+  console.log(clientSecret, "ooooooooooo");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -74,10 +82,10 @@ useEffect(() => {
           },
         },
       });
-      if (confirmError) {
-          console.log(confirmError);
-      }
-      console.log(paymentIntent,"ooooooooo");
+    if (confirmError) {
+      console.log(confirmError);
+    }
+    console.log(paymentIntent, "ooooooooo");
   };
   return (
     <div className="flex flex-col sm:flex-row gap-8">
